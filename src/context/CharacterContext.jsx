@@ -9,7 +9,7 @@ export const CharacterProvider = ({ children }) => {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true); // 👈 Nuevo estado para diferenciar la primera carga
+  const [isFirstLoad, setIsFirstLoad] = useState(true); //Nuevo estado para diferenciar la primera carga
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +28,7 @@ export const CharacterProvider = ({ children }) => {
         const data = await response.json();
         setCharacters(data.results || []);
 
-        // 👇 Muestra el mensaje solo si NO es la primera carga
+        // Muestra el mensaje solo si NO es la primera carga
         if (!isFirstLoad) {
           toast.success("Datos obtenidos correctamente ✅", {
             position: "top-right",
@@ -46,7 +46,7 @@ export const CharacterProvider = ({ children }) => {
         toast.error("No se encontraron datos ❌");
       } finally {
         setTimeout(() => setLoading(false), 500);
-        setIsFirstLoad(false); // 👈 Cambia el estado para futuras búsquedas
+        setIsFirstLoad(false); //Cambia el estado para futuras búsquedas
       }
     };
 
