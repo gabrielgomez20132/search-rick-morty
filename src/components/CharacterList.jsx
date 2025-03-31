@@ -17,7 +17,7 @@ function CharacterList({ watchlist, setWatchlist }) {
   const addToWatchList = (character) => {
     const exists = watchlist.some((c) => c.id === character.id);
     if (exists) {
-      toast.error("¡Este personaje ya está en la Watchlist!");
+      toast.error("¡Este personaje ya está en favoritos!");
       return;
     }
 
