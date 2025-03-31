@@ -4,7 +4,7 @@ const CharacterContext = createContext();
 
 export const CharacterProvider = ({ children }) => {
   const [characters, setCharacters] = useState([]);
-  const [count, setCount] = useState(12); // Número de personajes a mostrar
+  const [count, setCount] = useState(20); // Número de personajes a mostrar
   const [searchInput, setSearchInput] = useState(""); // Texto ingresado en el input
   const [search, setSearch] = useState(""); // Texto confirmado para la búsqueda
   const [loading, setLoading] = useState(false);
