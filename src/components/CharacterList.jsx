@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { CharacterContext } from '../context/CharacterContext';
+import React, { useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { CharacterContext } from "../context/CharacterContext";
 
 function CharacterList({ watchlist, setWatchlist }) {
   const {
@@ -10,24 +10,25 @@ function CharacterList({ watchlist, setWatchlist }) {
     count,
     searchInput,
     setSearchInput,
-    handleSearch, // Función para ejecutar la búsqueda
-    setCount
+    handleSearch,
+    setCount,
   } = useContext(CharacterContext);
 
   const addToWatchList = (character) => {
     const exists = watchlist.some((c) => c.id === character.id);
     if (exists) {
-      toast.error('¡Este personaje ya está en la Watchlist!');
+      toast.error("¡Este personaje ya está en la Watchlist!");
       return;
     }
 
     const updatedWatchlist = [...watchlist, character];
     setWatchlist(updatedWatchlist);
-    localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+    localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
   };
 
   return (
     <div>
+      {/* Contenedor de Toast para que los mensajes aparezcan */}
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
 
       <div className="flex justify-center my-4 space-x-4">

@@ -1,64 +1,76 @@
-import React, { createContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from "react";
+import { toast } from "react-toastify";
 
 const CharacterContext = createContext();
 
 export const CharacterProvider = ({ children }) => {
   const [characters, setCharacters] = useState([]);
-  const [count, setCount] = useState(20); // Número de personajes a mostrar
-  const [searchInput, setSearchInput] = useState(""); // Texto ingresado en el input
-  const [search, setSearch] = useState(""); // Texto confirmado para la búsqueda
+  const [count, setCount] = useState(20);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true); // 👈 Nuevo estado para diferenciar la primera carga
 
-  // Cargar personajes desde la API
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = search ? 
-          `https://rickandmortyapi.com/api/character?name=${search}` :
-          `https://rickandmortyapi.com/api/character`; // Si no hay búsqueda, trae todos
+        const url = search
+          ? `https://rickandmortyapi.com/api/character?name=${search}`
+          : `https://rickandmortyapi.com/api/character`;
 
         const response = await fetch(url);
 
         if (!response.ok) {
-          throw new Error('No se pudo obtener los datos de la API');
+          throw new Error("No se pudo obtener los datos de la API");
         }
-        
-        const data = await response.json();
-        setCharacters(data.results || []); // Manejo de resultados vacíos
 
+        const data = await response.json();
+        setCharacters(data.results || []);
+
+        // 👇 Muestra el mensaje solo si NO es la primera carga
+        if (!isFirstLoad) {
+          toast.success("Datos obtenidos correctamente ✅", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+          });
+        }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setCharacters([]); // Si hay error, limpiar la lista
+        console.error("Error fetching data:", error);
+        setCharacters([]);
+        toast.error("No se encontraron datos ❌");
       } finally {
-        setTimeout(() => setLoading(false), 500); // Spinner por al menos 0.5s
+        setTimeout(() => setLoading(false), 500);
+        setIsFirstLoad(false); // 👈 Cambia el estado para futuras búsquedas
       }
     };
 
     fetchData();
-  }, [search]); // Se ejecuta cada vez que cambia 'search'
+  }, [search]);
 
-  // Memorizar personajes filtrados y limitados
   const filteredCharacters = useMemo(() => {
     return characters.slice(0, count);
   }, [characters, count]);
 
-  
-  // Función para manejar la búsqueda
   const handleSearch = () => {
-    setSearch(searchInput); // Actualiza el estado de búsqueda
+    setSearch(searchInput);
   };
 
   return (
     <CharacterContext.Provider
       value={{
-        characters: filteredCharacters, // Lista de personajes filtrados
+        characters: filteredCharacters,
         loading,
         count,
         searchInput,
         setSearchInput,
         handleSearch,
-        setCount
+        setCount,
       }}
     >
       {children}
